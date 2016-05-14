@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AndroidWithOpenCV</string>
+    <string name="title_activity_main">Creator</string>
+    <string name="title_activity_main_menu">MainMenu</string>
+    <string name="title_activity_gallery">Gallery</string>
+    <string name="title_activity_result">Result</string>
 </resources>
