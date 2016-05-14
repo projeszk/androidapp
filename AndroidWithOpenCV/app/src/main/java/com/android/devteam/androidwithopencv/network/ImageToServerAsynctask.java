@@ -17,11 +17,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-//import java.nio.file.Files;
-//import javax.imageio.ImageIO;
 
 /**
- * Created by Reciproka on 2016.05.14..
+ * Created by Szanyi Gabor
  */
 public class ImageToServerAsynctask extends AsyncTask<Void, Void, Bitmap> {
 
@@ -61,8 +59,6 @@ public class ImageToServerAsynctask extends AsyncTask<Void, Void, Bitmap> {
 
             System.out.println("Byte array length: " + bs.length);
 
-            //printWriter.print(14);
-            //printWriter.flush();
             BufferedInputStream input = new BufferedInputStream(new FileInputStream(image));
             BufferedOutputStream out = null;
             try {
@@ -94,11 +90,7 @@ public class ImageToServerAsynctask extends AsyncTask<Void, Void, Bitmap> {
 
                 in.read(data, 0, client.getReceiveBufferSize());
                 return BitmapFactory.decodeByteArray(data , 0, data .length);
-           //     Image image = ImageIO.read(new ByteArrayInputStream(data));
-             //   Bitmap bi = new Bitmap(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
-            //    File outputfile = new File("saved.jpg");
-             //   ImageIO.write(bi, "jpg", outputfile);
-            } catch (Exception e) {System.err.println(e.getMessage());}
+           } catch (Exception e) {System.err.println(e.getMessage());}
 
         } catch (IOException exception) {
             System.err.println("Exception: " + exception.getMessage());

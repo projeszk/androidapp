@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -43,10 +42,6 @@ public class Creator extends Fragment implements OnClickListener {
         View v=View.inflate(getActivity(), R.layout.activity_main, null);
         ivPhoto = ( ImageView)v.findViewById (R.id.ivPhoto);
 
-       // Drawable myDrawable = getResources().getDrawable(R.drawable.noimg);
-        //ivPhoto= ( ImageView) v.findViewById (R.id.ivPhoto);
-       // ivPhoto.setImageDrawable(myDrawable);
-
         Button btnTakePhoto = (Button) v.findViewById(R.id.btnTakePhoto);
         Button btnsendPhoto = (Button) v.findViewById(R.id.btnTakePhoto);
         btnTakePhoto.setOnClickListener(this);
@@ -57,13 +52,12 @@ public class Creator extends Fragment implements OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-       log.info("RRRRRRR"+(requestCode == CAMERA_IMAGE_REQUEST && resultCode == Activity.RESULT_OK));
         if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
             { try
             {    File imageFile = new File(IMAGEPATH);
                 FileInputStream fis = new FileInputStream(imageFile);
                 Bitmap img = BitmapFactory.decodeStream(fis);
-                ivPhoto.setImageDrawable(null); // <--- added to force redraw of ImageView
+                ivPhoto.setImageDrawable(null);
                 ivPhoto.setImageURI(Uri.fromFile(imageFile));
 
             }
