@@ -20,6 +20,13 @@ import com.android.devteam.androidwithopencv.adapter.ImageAdapter;
 public class Gallery extends Fragment {
     public static final String TAG="Gallery";
 
+    /**
+     * Here set our gridview with images by ImageAdapter.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -34,6 +34,10 @@ public class Result extends Activity  implements View.OnClickListener {
     static final File imageRoot = new File(Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES), appDirectoryName);
 
+    /**
+     * set our buttons and view.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         byte[] byteArray = getIntent().getByteArrayExtra("image");

@@ -7,6 +7,13 @@ import android.support.v4.view.ViewPager;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
+/**
+ *This class handle our menu, with SherlockFragmentActivity.
+ *
+ * @author  Gábor Szanyi
+ * @version 1.0
+ * @since   2016-05-15
+ */
 public class MainMenu extends SherlockFragmentActivity {
 
     ActionBar actionbar;
