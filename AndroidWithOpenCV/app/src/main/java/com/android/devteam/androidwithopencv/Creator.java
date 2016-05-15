@@ -26,6 +26,13 @@ import android.widget.Toast;
 import com.android.devteam.androidwithopencv.network.ImageToServerAsynctask;
 
 
+/**
+ *With this class we can create image and send it to the server for get back a "random" image.
+ *
+ * @author  Gábor Szanyi
+ * @version 1.0
+ * @since   2016-05-15
+ */
 public class Creator extends Fragment implements OnClickListener {
     private final int CAMERA_IMAGE_REQUEST = 101;
     private final String IMAGEPATH =Environment.getExternalStorageDirectory().
@@ -34,6 +41,7 @@ public class Creator extends Fragment implements OnClickListener {
     public static final String TAG="Creator";
     File imageFile;
     ImageView ivPhoto;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +75,10 @@ public class Creator extends Fragment implements OnClickListener {
     }
 }
 
+    /**
+     * Here we use the view that get the Buttons id and use their function, like send the image to server, or create image with default camera settings.
+     * @param view we use this to get button's id what we pressed and use it's function.
+     */
     @Override
     public void onClick(View view) {
 
