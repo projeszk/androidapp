@@ -36,7 +36,7 @@ import com.android.devteam.androidwithopencv.network.ImageToServerAsynctask;
 public class Creator extends Fragment implements OnClickListener {
     private final int CAMERA_IMAGE_REQUEST = 101;
     private final String IMAGEPATH =Environment.getExternalStorageDirectory().
-            getAbsolutePath( ) +"/"+new Date().getTime()+"_image.jpg";
+            getAbsolutePath( )+"/tmp_image.jpg";
     Logger log=Logger.getLogger(Creator.class.getName());
     public static final String TAG="Creator";
     File imageFile;

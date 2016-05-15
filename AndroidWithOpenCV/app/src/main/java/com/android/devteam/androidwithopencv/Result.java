@@ -56,6 +56,7 @@ public class Result extends Activity  implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.SavePhoto: {
+                if(!imageRoot.exists())
                 imageRoot.mkdirs();
                 File image = new File(imageRoot, new Date().getTime() + ".jpg");
                 FileInputStream fis = null;
