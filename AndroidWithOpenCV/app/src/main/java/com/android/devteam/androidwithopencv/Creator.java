@@ -34,7 +34,7 @@ import com.android.devteam.androidwithopencv.network.ImageToServerAsynctask;
  * @version 1.0
  * @since   2016-05-15
  */
-public class Creator extends Fragment implements OnClickListener {
+public class Creator extends Fragment implements OnClickListener, ResultCallback {
     private final int CAMERA_IMAGE_REQUEST = 101;
     private final String IMAGEPATH =Environment.getExternalStorageDirectory().
             getAbsolutePath( )+"/tmp_image.jpg";
@@ -88,23 +88,8 @@ public class Creator extends Fragment implements OnClickListener {
             case R.id.sendToServer:
             {
                 Log.d("CREATOR", "SEND_TO_SERVER");
-                ImageToServerAsynctask imgtoserver=new ImageToServerAsynctask(imageFile,1);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                Bitmap bmp= null;
-                try {
-                    bmp = imgtoserver.execute().get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-
-                Intent resultIntent = new Intent(getActivity(),Result.class);
-                resultIntent.putExtra("image",byteArray);
-                startActivity(resultIntent);
-
+                ImageToServerAsynctask imgtoserver=new ImageToServerAsynctask(imageFile,1, this);
+                imgtoserver.execute();
                 break;
             }
             case R.id.btnTakePhoto:
@@ -121,5 +106,15 @@ public class Creator extends Fragment implements OnClickListener {
         }
 }
 
+    @Override
+    public void onResultReceived(Bitmap result) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        result.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        Intent resultIntent = new Intent(getActivity(),Result.class);
+        resultIntent.putExtra("image",byteArray);
+        startActivity(resultIntent);
+    }
 }
 
