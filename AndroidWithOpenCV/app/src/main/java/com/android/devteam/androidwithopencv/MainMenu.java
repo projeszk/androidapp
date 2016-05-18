@@ -1,11 +1,20 @@
 package com.android.devteam.androidwithopencv;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.InputType;
+import android.widget.EditText;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuInflater;
+import com.android.devteam.androidwithopencv.network.ImageToServerAsynctask;
 
 /**
  *This class handle our menu, with SherlockFragmentActivity.
@@ -43,6 +52,38 @@ public class MainMenu extends SherlockFragmentActivity {
         actionbar.addTab(tab1);
         actionbar.addTab(tab2);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.set_ip:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Set IP address of the server");
+                final EditText input = new EditText(this);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ImageToServerAsynctask.HOST = input.getText().toString();
+                    }
+                });
+
+                builder.show();
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     class MyTabListener implements ActionBar.TabListener
