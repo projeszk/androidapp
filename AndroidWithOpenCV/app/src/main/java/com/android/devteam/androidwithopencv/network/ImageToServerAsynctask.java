@@ -29,7 +29,7 @@ public class ImageToServerAsynctask extends AsyncTask<Void, Void, Bitmap> {
     InputStream inputStream;
     static ByteArrayOutputStream imagetoByte;
     DataOutputStream dos;
-    private static final String HOST = "192.168.43.99";
+    public static String HOST = "";
     private static final int PORT = 8080;
     int choice;
 
@@ -40,19 +40,16 @@ public class ImageToServerAsynctask extends AsyncTask<Void, Void, Bitmap> {
 
     @Override
     protected Bitmap doInBackground(Void... params) {
+
         Socket client = null;
         try {
             client = new Socket(HOST, PORT);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            PrintWriter printWriter = new PrintWriter(client.getOutputStream(), true);
-
-            String serverMsg = bufferedReader.readLine();
-            System.out.println("MSG: " + serverMsg);
+            System.out.println("HOSTNAME" + HOST);
 
             byte[] bs;
             BitmapFactory.Options bmOptions = new BitmapFactory.Options();
             Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
-            bitmap = Bitmap.createScaledBitmap(bitmap,480,620,true);
+            bitmap = Bitmap.createScaledBitmap(bitmap,240,320,true);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
             bs= stream.toByteArray();
@@ -61,34 +58,35 @@ public class ImageToServerAsynctask extends AsyncTask<Void, Void, Bitmap> {
 
             BufferedInputStream input = new BufferedInputStream(new FileInputStream(image));
             BufferedOutputStream out = null;
+            BufferedInputStream recieve = new BufferedInputStream(client.getInputStream());
             try {
                 out = new BufferedOutputStream(client.getOutputStream());
-                final int buffSize = 4096;
+                final int buffSize = 1024;
                 byte[] buffer = new byte[buffSize];
                 int size;
                 while ((size = input.read(buffer)) != -1) {
                     System.out.println("data: " + size);
                     out.write(buffer, 0, size);
                     out.flush();
+                    System.out.println(recieve.read());
                 }
-                System.out.println(client.isClosed());
-
-            } catch (Exception e) {}
-            System.out.println(client.isClosed());
+                out.write("ok".getBytes(), 0, 2);
+                out.flush();
+            } catch (Exception e) {
+                System.out.println("Exception occured while sending image " + e.getMessage());
+            }
 
             try {
                 byte[] b = new byte[client.getReceiveBufferSize()];
-                BufferedInputStream recieve = new BufferedInputStream(client.getInputStream());
                 recieve.read(b);
 
                 byte[] data;
 
                 System.out.println("Reading Image");
-                InputStream in = client.getInputStream();
 
                 data = new byte[client.getReceiveBufferSize()];
 
-                in.read(data, 0, client.getReceiveBufferSize());
+                recieve.read(data, 0, client.getReceiveBufferSize());
                 return BitmapFactory.decodeByteArray(data , 0, data .length);
            } catch (Exception e) {System.err.println(e.getMessage());}
 
