@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,7 +52,7 @@ public class Creator extends Fragment implements OnClickListener {
         ivPhoto = ( ImageView)v.findViewById (R.id.ivPhoto);
 
         Button btnTakePhoto = (Button) v.findViewById(R.id.btnTakePhoto);
-        Button btnsendPhoto = (Button) v.findViewById(R.id.btnTakePhoto);
+        Button btnsendPhoto = (Button) v.findViewById(R.id.sendToServer);
         btnTakePhoto.setOnClickListener(this);
         btnsendPhoto.setOnClickListener(this);
 
@@ -86,6 +87,7 @@ public class Creator extends Fragment implements OnClickListener {
         {
             case R.id.sendToServer:
             {
+                Log.d("CREATOR", "SEND_TO_SERVER");
                 ImageToServerAsynctask imgtoserver=new ImageToServerAsynctask(imageFile,1);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 Bitmap bmp= null;
