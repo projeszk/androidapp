@@ -10,6 +10,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,61 +51,67 @@ public class ImageToServerAsynctask extends AsyncTask<Void, Void, Bitmap>{
         Socket client = null;
         try {
             client = new Socket(HOST, PORT);
-            System.out.println("HOSTNAME" + HOST);
+            System.out.println("HOSTNAME " + HOST);
 
             byte[] bs;
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath(),bmOptions);
-            bitmap = Bitmap.createScaledBitmap(bitmap,240,320,true);
+            Bitmap bitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+            bitmap = Bitmap.createScaledBitmap(bitmap,640,480,true);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             bs = stream.toByteArray();
-            System.out.println("Byte array length: " + bs.length);
 
-            BufferedInputStream input = new BufferedInputStream(new FileInputStream(image));
             BufferedOutputStream out = null;
-            BufferedInputStream recieve = new BufferedInputStream(client.getInputStream());
+            DataInputStream receive = new DataInputStream(client.getInputStream());
             try {
                 out = new BufferedOutputStream(client.getOutputStream());
                 final int buffSize = 1024;
-                int chuncks = bs.length / 1024;
-                System.out.println("chuncks " + chuncks);
+                int chunks = bs.length / 1024;
+                System.out.println("chuncks " + chunks);
                 int i = 0;
-                while (i<chuncks) {
+                while (i<chunks) {
                     System.out.println("Sending " + i + ". package");
                     out.write(Arrays.copyOfRange(bs, i * buffSize, i * buffSize + buffSize), 0, buffSize);
                     out.flush();
-                    System.out.println(recieve.read());
+                    System.out.println(receive.read());
                     ++i;
                 }
-                out.write(Arrays.copyOfRange(bs, i*buffSize, i*buffSize+(bs.length - i*buffSize - 1)), 0, (bs.length - i*buffSize - 1));
+                out.write(Arrays.copyOfRange(bs, i*buffSize, i*buffSize+(bs.length - i*buffSize)), 0, (bs.length - i*buffSize));
                 out.flush();
-                System.out.println(recieve.read());
+                System.out.println(receive.read());
                 out.write("ok".getBytes(), 0, 2);
                 out.flush();
             } catch (Exception e) {
                 System.out.println("Exception occured while sending image " + e.getMessage());
             }
 
-            try {
-                System.out.println("Reading Image");
-                System.out.println(client.getReceiveBufferSize());
-                byte[] sizeInBytes = new byte[4];
-                recieve.read(sizeInBytes, 0, 4);
-                ByteBuffer wrapped = ByteBuffer.wrap(sizeInBytes);
-                int size = wrapped.getInt();
-                System.out.println(size);
-                byte[] data = new byte[size];
+            System.out.println("Reading Image");
+            int size = receive.readInt();
 
-                recieve.read(data, 0, size);
-                Bitmap bmp = BitmapFactory.decodeByteArray(data , 0, data.length);
-                if(bmp == null){
-                    System.out.println("Error receiving image");
-                }
-                return BitmapFactory.decodeByteArray(data , 0, data.length);
-           } catch (Exception e) {
-                System.err.println("Exception: " + e.getMessage());
+            System.out.println("Size: " + size);
+            byte[] data = new byte[size];
+            out.write("ok".getBytes(), 0, 2);
+            out.flush();
+            int chunks = size / 1024;
+            System.out.println("chuncks " + chunks);
+            int i = 0;
+            while (i<chunks) {
+                System.out.println("Receiving " + i + ". package");
+                byte[] chunk = new byte[1024];
+                receive.read(chunk);
+                System.arraycopy(chunk, 0, data, i * 1024, 1024);
+                out.write("ok".getBytes(), 0, 2);
+                out.flush();
+                ++i;
             }
+            byte[] chunk = new byte[1024];
+            receive.read(chunk);
+            System.out.println(size - i * 1024);
+            System.arraycopy(chunk, 0, data, i * 1024, size - i * 1024);
+            Bitmap bmp = BitmapFactory.decodeByteArray(data , 0, size);
+            if(bmp == null){
+                System.err.println("Error receiving image");
+            }
+            return bmp;
 
         } catch (IOException exception) {
             System.err.println("Exception: " + exception.getMessage());

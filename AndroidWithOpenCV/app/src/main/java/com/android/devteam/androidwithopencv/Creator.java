@@ -49,7 +49,7 @@ public class Creator extends Fragment implements OnClickListener, ResultCallback
                              Bundle savedInstanceState) {
 
         View v=View.inflate(getActivity(), R.layout.activity_main, null);
-        ivPhoto = ( ImageView)v.findViewById (R.id.ivPhoto);
+        ivPhoto = (ImageView)v.findViewById (R.id.ivPhoto);
 
         Button btnTakePhoto = (Button) v.findViewById(R.id.btnTakePhoto);
         Button btnsendPhoto = (Button) v.findViewById(R.id.sendToServer);
@@ -109,7 +109,7 @@ public class Creator extends Fragment implements OnClickListener, ResultCallback
     @Override
     public void onResultReceived(Bitmap result) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        result.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        result.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
 
         Intent resultIntent = new Intent(getActivity(),Result.class);

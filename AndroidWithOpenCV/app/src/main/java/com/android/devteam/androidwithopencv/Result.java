@@ -40,15 +40,17 @@ public class Result extends Activity  implements View.OnClickListener {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_result);
         byte[] byteArray = getIntent().getByteArrayExtra("image");
         final Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         ImageView ivPhoto = (ImageView)findViewById (R.id.ivPhoto);
         Button saveBtn=(Button)findViewById(R.id.SavePhoto);
         Button removeBtn=(Button)findViewById(R.id.removePhoto);
         ivPhoto.setImageBitmap(bmp);
+        saveBtn.setOnClickListener(this);
+        removeBtn.setOnClickListener(this);
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_result);
     }
 
     /**
