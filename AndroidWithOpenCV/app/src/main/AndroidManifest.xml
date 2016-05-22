@@ -26,7 +26,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainMenu"
-            android:configChanges="keyboardHidden|orientation|screenSize">
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,14 +37,17 @@
 
         <fragment
             android:name=".Creator"
-            android:label="@string/title_activity_main" />
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait"/>
         <fragment
             android:name=".Gallery"
-            android:label="@string/title_activity_gallery" />
+            android:label="@string/title_activity_gallery"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".Result"
-            android:label="@string/title_activity_result"></activity>
+            android:label="@string/title_activity_result"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
